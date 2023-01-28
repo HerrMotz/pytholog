@@ -22,6 +22,23 @@ class KnowledgeBase(object):
         KnowledgeBase.__id += 1
         self.name = name
         self._cache = {}
+
+    def rem_kn(self, kn):
+        for i in kn:
+            i = Fact(i)
+            g = [Goal(Fact(r.to_string())) for r in i.rhs]
+            if i.lh.predicate in self.db:
+                self.db[i.lh.predicate]["facts"].pop(i)
+                self.db[i.lh.predicate]["terms"].pop(i.terms)
+                self.db[i.lh.predicate]["goals"].pop(g)
+
+                # delete it if it is now empty
+                if not len(self.db[i.lh.predicate]["facts"]) \
+                        and not len(self.db[i.lh.predicate]["terms"]) \
+                        and not len(self.db[i.lh.predicate]["goals"]):
+                    del self.db[i.lh.predicate]
+
+                self.clear_cache()
     
     ## the main function that adds new entries or append existing ones
     ## it creates "facts", "goals" and "terms" buckets for each predicate
@@ -30,13 +47,15 @@ class KnowledgeBase(object):
             i = Fact(i)
             ## rhs are stored as Expr here we change class to Goal
             g = [Goal(Fact(r.to_string())) for r in i.rhs]
+
             if i.lh.predicate in self.db:
                 self.db[i.lh.predicate]["facts"].push(i)
                 self.db[i.lh.predicate]["terms"].push(i.terms)
                 self.db[i.lh.predicate]["goals"].push(g)
                 # self.db[i.lh.predicate]["terms"].append(i.terms)
                 indx, look_up = term_checker(Expr(i.to_string()))
-                del self._cache[look_up]
+                if look_up in self._cache:
+                    del self._cache[look_up]
             else:
                 # initialize the knowledge base
                 self.db[i.lh.predicate] = {}

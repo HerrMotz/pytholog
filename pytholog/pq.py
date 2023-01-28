@@ -27,6 +27,12 @@ class FactHeap():
 
     def push(self, item):
         insort(self._container, item) # in by sort
+
+    def pop(self, item):
+        if item in self._container:
+            self._container.remove(item)
+        else:
+            print("item not in container")
         
     def __getitem__(self, item):
          return self._container[item]

@@ -34,4 +34,7 @@ class Fact:
         
     def __lt__(self, other):
         return self.lh.terms[self.lh.index] < other.lh.terms[other.lh.index]
+
+    def __eq__(self, other):
+        return self.fact == other.fact
         
