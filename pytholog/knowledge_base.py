@@ -67,6 +67,9 @@ class KnowledgeBase(object):
                 self.db[i.lh.predicate]["terms"].push(i.terms)
                 #self.db[i.lh.predicate]["goals"] = [g]
                 #self.db[i.lh.predicate]["terms"] = [i.terms]
+
+    def s_add_kn(self, kn):
+        return self.add_kn([Fact(f"{predicate}({', '.join(str(x) for x in values)})") for predicate, values in kn])
             
     def __call__(self, args):
         self.add_kn(args)
