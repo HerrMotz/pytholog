@@ -75,6 +75,9 @@ class KnowledgeBase(object):
     ## it is only to be user intuitive readable method                                      
     def query(self, expr, cut = False, show_path = False):
         return rule_query(self, expr, cut, show_path)
+
+    def sq(self, predicate, values):
+        return rule_query(self, Expr(f"{predicate}({', '.join(str(x) for x in values)})"))
         
     def rule_search(self, expr):
         if expr.predicate not in self.db:
