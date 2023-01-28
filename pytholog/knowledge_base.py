@@ -68,8 +68,8 @@ class KnowledgeBase(object):
                 #self.db[i.lh.predicate]["goals"] = [g]
                 #self.db[i.lh.predicate]["terms"] = [i.terms]
 
-    def s_add_kn(self, kn):
-        return self.add_kn([Fact(f"{i[0]}({', '.join(str(x) for x in i[1:])})") for i in kn])
+    def add(self, predicate, **values):
+        return self.add_kn([Fact(f"{predicate}({', '.join(str(x) for x in values)})")])
             
     def __call__(self, args):
         self.add_kn(args)
@@ -79,7 +79,7 @@ class KnowledgeBase(object):
     def query(self, expr, cut = False, show_path = False):
         return rule_query(self, expr, cut, show_path)
 
-    def sq(self, predicate, values):
+    def q(self, predicate, **values):
         return rule_query(self, Expr(f"{predicate}({', '.join(str(x) for x in values)})"))
         
     def rule_search(self, expr):
